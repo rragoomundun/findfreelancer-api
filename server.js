@@ -7,9 +7,14 @@ import helmet from 'helmet';
 import hpp from 'hpp';
 import rateLimit from 'express-rate-limit';
 
+import connectDB from './config/db.js';
+
 import xssProtectMiddleware from './middlewares/xssProtect.middleware.js';
 import notFoundMiddleware from './middlewares/notFound.middleware.js';
 import errorMiddleware from './middlewares/error.middleware.js';
+
+// Connect to database
+connectDB();
 
 const app = express();
 
