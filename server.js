@@ -23,6 +23,9 @@ app.use(express.static('public'));
 
 if (process.env.NODE_ENV === 'dev') {
   app.use(morgan('dev'));
+  process.env.APP_URL = process.env.APP_DEV_URL;
+} else {
+  process.env.APP_URL = process.env.APP_PROD_URL;
 }
 
 // Enable CORS
@@ -75,13 +78,20 @@ const versionPrefix = '/v1';
 
 //Route files
 import apiRoute from './routes/api.route.js';
+import authRoute from './routes/auth.route.js';
 
 // Mount router
 app.use(`${versionPrefix}/api`, apiRoute);
+app.use(`${versionPrefix}/auth`, authRoute);
 
 // Errors
 app.use(notFoundMiddleware);
 app.use(errorMiddleware);
+
+// Crons
+import tokenCrons from './crons/token.cron.js';
+
+tokenCrons.clearTokens();
 
 app.listen(process.env.PORT, () => {
   console.log(`[OK] Server is running in ${process.env.NODE_ENV} mode on port ${process.env.PORT}`.green);
