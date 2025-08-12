@@ -4,6 +4,7 @@ import Freelancer from '../models/Freelancer.js';
 import ErrorResponse from '../classes/ErrorResponse.js';
 
 import mailUtil from '../utils/mail.util.js';
+import cryptUtil from '../utils/crypt.util.js';
 
 /**
  * @api {POST} /auth/register Register
@@ -56,4 +57,51 @@ const register = async (req, res, next) => {
   res.status(httpStatus.CREATED).end();
 };
 
-export { register };
+/**
+ * @api {POST} /auth/register/confirm/:confirmationToken Confirm User Registration
+ * @apiGroup Auth
+ * @apiName AuthRegisterConfirm
+ * 
+ * @apiDescription Confirm a user by validating its confirmation token.
+ * 
+ * @apiParam {String} confirmationToken User's confirmation token
+
+ * @apiSuccess (Success (200)) {String} token JWT token
+ * @apiSuccessExample Success Example
+ * {
+ *   "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlNmY0MDQ1MzVlNzU3NWM1NGExNTMyNyIsImlhdCI6MTU4NDM0OTI1MywiZXhwIjoxNTg2OTQxMjUzfQ.2f59_zRuYVXADCQWnQb6mG8NG3zulj12HZCgoIdMEfw"
+ * }
+ * 
+ * @apiError (Error (400)) INVALID_TOKEN Invalid token
+ *
+ * @apiPermission Public
+ */
+const registerConfirm = async (req, res, next) => {
+  const { confirmationToken } = req.params;
+  const hashedToken = cryptUtil.getDigestHash(confirmationToken);
+  const freelancer = await Freelancer.findOne({ 'tokens.value': hashedToken });
+
+  if (freelancer === null) {
+    throw new ErrorResponse('Invalid token', httpStatus.BAD_REQUEST, 'INVALID_TOKEN');
+  }
+
+  await Freelancer.updateOne({ _id: freelancer._id }, { $set: { tokens: [] } });
+
+  sendTokenResponse(freelancer._id, httpStatus.OK, res);
+};
+
+// Create token from model, create cookie, and send response
+const sendTokenResponse = async (freelancerId, statusCode, res) => {
+  const freelancer = await Freelancer.findOne({ _id: freelancerId });
+  const token = freelancer.getSignedJWTToken();
+
+  const options = {
+    expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * process.env.JWT_COOKIE_EXPIRE),
+    sameSite: 'None',
+    secure: true
+  };
+
+  res.status(statusCode).cookie('token', token, options).json({ token });
+};
+
+export { register, registerConfirm };
