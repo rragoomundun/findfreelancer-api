@@ -13,7 +13,8 @@
     "AuthRegisterConfirm",
     "AuthLogin",
     "AuthLogout",
-    "AuthForgotPassword"
+    "AuthForgotPassword",
+    "AuthResetPassword"
   ],
   "template": {
     "forceLanguage": "en",
