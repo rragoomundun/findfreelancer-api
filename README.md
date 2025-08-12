@@ -21,6 +21,42 @@ RATE_LIMIT=100
 MONGO_URI=mongodb://user:password@127.0.0.1:27017/db
 
 
+# AWS API Access Key
+AWS_ACCESS_KEY_ID=accesskeyid
+
+# AWS API Secret Access Key
+AWS_SECRET_ACCESS_KEY=secretaccesskey
+
+# AWS S3 Upload Bucket Region
+AWS_S3_REGION=s3region
+
+# AWS S3 bucket name
+AWS_S3_BUCKET_NAME=bucketname
+
+# AWS SES region
+AWS_SES_REGION=sesregion
+
+
+# From email name
+FROM_NAME=FindFreelancer
+
+# From email address
+FROM_EMAIL=noreply@ex.com
+
+# Reply email address
+REPLY_EMAIL=contact@ex.com
+
+
+# JWT Token secret code
+JWT_SECRET=secret
+
+# JWT Token duration. On this example it will expire in 180 days
+JWT_EXPIRE=180d
+
+# JWT Token cookie duration. The value is in days.
+JWT_COOKIE_EXPIRE=180
+
+
 # The production front end URL
 APP_PROD_URL=https://app.markedit.net
 
