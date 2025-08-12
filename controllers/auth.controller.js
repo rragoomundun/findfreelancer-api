@@ -153,6 +153,63 @@ const logout = async (req, res, next) => {
     .end();
 };
 
+/**
+ * @api {POST} /auth/password/forgot Forgot Password
+ * @apiGroup Auth
+ * @apiName AuthForgotPassword
+ *
+ * @apiDescription Generate reset password token and send reset email
+ *
+ * @apiBody {String} email User's email
+ *
+ * @apiParamExample {json} Body Example
+ * {
+ *   "email": "tom@ex.com"
+ * }
+ *
+ * @apiError (Error (400)) INVALID_PARAMETERS One or more parameters are invalid
+ * @apiError (Error (401)) UNCONFIRMED The account is unconfirmed
+ * @apiError (Error (409)) ALREADY_RECOVERING A recovery procedure is already in progress
+ * @apiError (Error (500)) EMAIL_SENDING_FAILED Cannot send recovery email
+ *
+ * @apiPermission Public
+ */
+const forgotPassword = async (req, res, next) => {
+  const { email } = req.body;
+  const freelancer = await Freelancer.findOne({ email });
+
+  if (freelancer.tokens.find((token) => token.type === 'register-confirm')) {
+    throw new ErrorResponse('Acount unconfirmed', httpStatus.UNAUTHORIZED, 'UNCONFIRMED');
+  } else if (freelancer.tokens.find((token) => token.type === 'password-reset')) {
+    throw new ErrorResponse(
+      'A password recovery procedure is already in progress',
+      httpStatus.CONFLICT,
+      'ALREADY_RECOVERING'
+    );
+  }
+
+  const resetPasswordToken = await Freelancer.generateToken('password-reset');
+
+  try {
+    const mailOptions = {
+      mail: 'passwordForgotten',
+      freelancerId: freelancer._id,
+      templateOptions: {
+        resetLink: `${process.env.APP_URL}/auth/password/reset/${resetPasswordToken.decrypted}`
+      }
+    };
+
+    await mailUtil.send(mailOptions);
+
+    freelancer.tokens.push(resetPasswordToken.encrypted);
+    await freelancer.save();
+
+    res.status(httpStatus.OK).end();
+  } catch {
+    return next(new ErrorResponse('Cannot send email', httpStatus.INTERNAL_SERVER_ERROR, 'EMAIL_SENDING_FAILED'));
+  }
+};
+
 // Create token from model, create cookie, and send response
 const sendTokenResponse = async (freelancerId, statusCode, res) => {
   const freelancer = await Freelancer.findOne({ _id: freelancerId });
@@ -167,4 +224,4 @@ const sendTokenResponse = async (freelancerId, statusCode, res) => {
   res.status(statusCode).cookie('token', token, options).json({ token });
 };
 
-export { register, registerConfirm, login, logout };
+export { register, registerConfirm, login, logout, forgotPassword };

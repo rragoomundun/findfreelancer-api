@@ -5,7 +5,16 @@
   "title": "FindFreelancer API",
   "url": "http://localhost:5000/v1",
   "sampleUrl": "http://localhost:5000/v1",
-  "order": ["API", "APIGetStatus", "Auth", "AuthRegister", "AuthRegisterConfirm", "AuthLogin", "AuthLogout"],
+  "order": [
+    "API",
+    "APIGetStatus",
+    "Auth",
+    "AuthRegister",
+    "AuthRegisterConfirm",
+    "AuthLogin",
+    "AuthLogout",
+    "AuthForgotPassword"
+  ],
   "template": {
     "forceLanguage": "en",
     "withCompare": false,
