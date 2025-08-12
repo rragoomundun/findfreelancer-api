@@ -140,7 +140,8 @@ const FreelancerSchema = new Schema(
           encrypted: {
             type,
             value: cryptUtil.getDigestHash(token),
-            expire: Date.now() + 1000 * 60 * 60 // Expires in 1 hour
+            // expire: Date.now() + 1000 * 60 * 60 // Expires in 1 hour
+            expire: Date.now() + 1000 * 60
           }
         };
       }
