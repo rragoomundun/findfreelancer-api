@@ -43,4 +43,17 @@ const loginValidator = validation([
   body('password').notEmpty().withMessage('EMPTY')
 ]);
 
-export { registerValidator, loginValidator };
+const forgotPasswordValidator = validation([
+  body('email')
+    .notEmpty()
+    .withMessage('EMPTY')
+    .custom(async (email) => {
+      const freelancer = await Freelancer.findOne({ email });
+
+      if (!freelancer) {
+        throw new Error('NO_ACCOUNT_FOR_EMAIL');
+      }
+    })
+]);
+
+export { registerValidator, loginValidator, forgotPasswordValidator };

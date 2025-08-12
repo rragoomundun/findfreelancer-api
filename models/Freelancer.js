@@ -118,7 +118,7 @@ const FreelancerSchema = new Schema(
         },
         type: {
           type: String,
-          enum: ['register-confirm', 'password-forget'],
+          enum: ['register-confirm', 'password-reset'],
           required: true
         }
       }
