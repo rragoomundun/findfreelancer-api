@@ -17,7 +17,7 @@ import cryptUtil from '../utils/crypt.util.js';
  * @apiBody {String} firstName User's firstname
  * @apiBody {String} lastName User's lastName
  * @apiBody {String{12..}} password User's password
- * @apiBody {String{12..}} repeatedPassword The repeated password
+ * @apiBody {String{12..}} passwordConfirmation The password's confirmation
  *
  * @apiParamExample {json} Body Example
  * {
@@ -25,7 +25,7 @@ import cryptUtil from '../utils/crypt.util.js';
  *   "firstName": "Tom",
  *   "lastName": "Jedusor",
  *   "password": "pfs83a01jH;B",
- *   "repeatedPassword": "pfs83a01jH;B"
+ *   "passwordConfirmation": "pfs83a01jH;B"
  * }
  *
  * @apiError (Error (400)) INVALID_PARAMETERS One or more parameters are invalid
@@ -210,6 +210,52 @@ const forgotPassword = async (req, res, next) => {
   }
 };
 
+/**
+ * @api {POST} /auth/password/reset/:resetPasswordToken Reset Password
+ * @apiGroup Auth
+ * @apiName AuthResetPassword
+ *
+ * @apiDescription Reset user password
+ *
+ * @apiParam {String} resetPasswordToken User's confirmation token
+ * @apiBody {String{12..}} password User's new password
+ * @apiBody {String{12...}} passwordConfirmation The password confirmation
+ *
+ * @apiParamExample {json} Body Example
+ * {
+ *   "password": "J9u21k%cde1t",
+ *   "passwordConfirmation": "J9u21k%cde1t"
+ * }
+ *
+ * @apiSuccess (Success (200)) {String} token JWT token
+ * @apiSuccessExample Success Example
+ * {
+ *   "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlNmY0MDQ1MzVlNzU3NWM1NGExNTMyNyIsImlhdCI6MTU4NDM0OTI1MywiZXhwIjoxNTg2OTQxMjUzfQ.2f59_zRuYVXADCQWnQb6mG8NG3zulj12HZCgoIdMEfw"
+ * }
+ *
+ * @apiError (Error (400)) INVALID_PARAMETERS One or more parameters are invalid
+ * @apiError (Error (400)) INVALID_TOKEN Invalid token
+ *
+ * @apiPermission Public
+ */
+const resetPassword = async (req, res, next) => {
+  const { resetPasswordToken } = req.params;
+  const { password } = req.body;
+  const resetPasswordTokenHash = cryptUtil.getDigestHash(resetPasswordToken);
+  const freelancer = await Freelancer.findOne({ 'tokens.value': resetPasswordTokenHash });
+
+  if (freelancer === null) {
+    throw new ErrorResponse('Invalid token', httpStatus.BAD_REQUEST, 'INVALID_TOKEN');
+  }
+
+  freelancer.password = password;
+  freelancer.tokens.pull({ value: resetPasswordTokenHash });
+
+  await freelancer.save();
+
+  sendTokenResponse(freelancer._id, httpStatus.OK, res);
+};
+
 // Create token from model, create cookie, and send response
 const sendTokenResponse = async (freelancerId, statusCode, res) => {
   const freelancer = await Freelancer.findOne({ _id: freelancerId });
@@ -224,4 +270,4 @@ const sendTokenResponse = async (freelancerId, statusCode, res) => {
   res.status(statusCode).cookie('token', token, options).json({ token });
 };
 
-export { register, registerConfirm, login, logout, forgotPassword };
+export { register, registerConfirm, login, logout, forgotPassword, resetPassword };
