@@ -256,6 +256,19 @@ const resetPassword = async (req, res, next) => {
   sendTokenResponse(freelancer._id, httpStatus.OK, res);
 };
 
+/**
+ * @api {GET} /auth/authorized Is Authorized
+ * @apiGroup Auth
+ * @apiName AuthAuthorized
+ *
+ * @apiDescription Verify if the user token is valid.
+ *
+ * @apiPermission Private
+ */
+const authorized = (req, res, next) => {
+  res.status(httpStatus.OK).end();
+};
+
 // Create token from model, create cookie, and send response
 const sendTokenResponse = async (freelancerId, statusCode, res) => {
   const freelancer = await Freelancer.findOne({ _id: freelancerId });
@@ -270,4 +283,4 @@ const sendTokenResponse = async (freelancerId, statusCode, res) => {
   res.status(statusCode).cookie('token', token, options).json({ token });
 };
 
-export { register, registerConfirm, login, logout, forgotPassword, resetPassword };
+export { register, registerConfirm, login, logout, forgotPassword, resetPassword, authorized };

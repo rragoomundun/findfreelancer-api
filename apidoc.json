@@ -14,7 +14,8 @@
     "AuthLogin",
     "AuthLogout",
     "AuthForgotPassword",
-    "AuthResetPassword"
+    "AuthResetPassword",
+    "AuthAuthorized"
   ],
   "template": {
     "forceLanguage": "en",
