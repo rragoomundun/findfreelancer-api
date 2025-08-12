@@ -6,8 +6,11 @@ import {
   login,
   logout,
   forgotPassword,
-  resetPassword
+  resetPassword,
+  authorized
 } from '../controllers/auth.controller.js';
+
+import authenticateMiddleware from '../middlewares/authenticate.middleware.js';
 
 import {
   registerValidator,
@@ -24,6 +27,7 @@ router
   .post('/login', loginValidator, login)
   .get('/logout', logout)
   .post('/password/forgot', forgotPasswordValidator, forgotPassword)
-  .post('/password/reset/:resetPasswordToken', resetPasswordValidator, resetPassword);
+  .post('/password/reset/:resetPasswordToken', resetPasswordValidator, resetPassword)
+  .get('/authorized', authenticateMiddleware, authorized);
 
 export default router;
