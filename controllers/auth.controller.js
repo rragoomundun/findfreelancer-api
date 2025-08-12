@@ -23,7 +23,7 @@ import cryptUtil from '../utils/crypt.util.js';
  * {
  *   "email": "tom@ex.com",
  *   "firstName": "Tom",
- *   "lastName": "Jedusor"
+ *   "lastName": "Jedusor",
  *   "password": "pfs83a01jH;B",
  *   "repeatedPassword": "pfs83a01jH;B"
  * }
@@ -90,6 +90,49 @@ const registerConfirm = async (req, res, next) => {
   sendTokenResponse(freelancer._id, httpStatus.OK, res);
 };
 
+/**
+ * @api {POST} /auth/login Login
+ * @apiGroup Auth
+ * @apiName AuthLogin
+ * 
+ * @apiDescription Login a user.
+ * 
+ * @apiBody {String} email User's email
+ * @apiBody {String} password User's password
+ * 
+ * @apiParamExample {json} Body Example
+ * {
+ *   "email": "tom@ex.com",
+ *   "password": "pfs83a01jH;B"
+ * }
+ * 
+ * @apiSuccess (Success (200)) {String} token JWT token
+ * @apiSuccessExample Success Example
+ * {
+ *   "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlNmY0MDQ1MzVlNzU3NWM1NGExNTMyNyIsImlhdCI6MTU4NDM0OTI1MywiZXhwIjoxNTg2OTQxMjUzfQ.2f59_zRuYVXADCQWnQb6mG8NG3zulj12HZCgoIdMEfw"
+ * }
+
+ * @apiError (Error (400)) INVALID_PARAMETERS One or more parameters are invalid
+ * @apiError (Error (401)) INVALID The data entered is invalid
+ * @apiError (Error (401)) UNCONFIRMED The account is unconfirmed
+ *
+ * @apiPermission Public
+ */
+const login = async (req, res, next) => {
+  const { email, password } = req.body;
+  const freelancer = await Freelancer.findOne({ email });
+
+  if (freelancer === null || !(await freelancer.verifyPassword(password))) {
+    throw new ErrorResponse('Data entered invalid', httpStatus.UNAUTHORIZED, 'INVALID');
+  }
+
+  if (freelancer.tokens.find((token) => token.type === 'register-confirm')) {
+    throw new ErrorResponse('Account unconfirmed', httpStatus.UNAUTHORIZED, 'UNCONFIRMED');
+  }
+
+  sendTokenResponse(freelancer._id, httpStatus.OK, res);
+};
+
 // Create token from model, create cookie, and send response
 const sendTokenResponse = async (freelancerId, statusCode, res) => {
   const freelancer = await Freelancer.findOne({ _id: freelancerId });
@@ -104,4 +147,4 @@ const sendTokenResponse = async (freelancerId, statusCode, res) => {
   res.status(statusCode).cookie('token', token, options).json({ token });
 };
 
-export { register, registerConfirm };
+export { register, registerConfirm, login };

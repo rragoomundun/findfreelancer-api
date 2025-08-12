@@ -22,18 +22,14 @@ const validation = (validations) => {
           }
         }
 
-        const messages = resultArray.map((result) => {
-          const messageSplitted = result.msg.split(';');
-          const message = messageSplitted
-            .find((messagePart) => messagePart.includes('message=') === true)
-            .split('=')[1];
-          const type = messageSplitted.find((messagePart) => messagePart.includes('type=') === true).split('=')[1];
+        const errors = {};
 
-          return { message, type, field: result.path };
-        });
+        for (const result of resultArray) {
+          errors[result.path] = result.msg;
+        }
 
-        if (messages.length) {
-          error = new ErrorResponse(messages, httpStatus.BAD_REQUEST, 'INVALID_PARAMETERS');
+        if (Object.keys(errors).length > 0) {
+          error = new ErrorResponse(errors, httpStatus.BAD_REQUEST, 'INVALID_PARAMETERS');
         }
       }
 
