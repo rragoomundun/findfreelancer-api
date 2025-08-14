@@ -25,6 +25,7 @@ const FreelancerSchema = new Schema(
       type: String,
       required: true
     },
+    image: String,
     location: {
       town: String,
       countryCode: String
