@@ -92,7 +92,6 @@ app.use(errorMiddleware);
 
 // Crons
 import tokenCrons from './crons/token.cron.js';
-import { version } from 'mongoose';
 
 tokenCrons.clearTokens();
 
