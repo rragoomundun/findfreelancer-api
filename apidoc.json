@@ -15,7 +15,9 @@
     "AuthLogout",
     "AuthForgotPassword",
     "AuthResetPassword",
-    "AuthAuthorized"
+    "AuthAuthorized",
+    "Freelancer",
+    "FreelancerGetMe"
   ],
   "template": {
     "forceLanguage": "en",

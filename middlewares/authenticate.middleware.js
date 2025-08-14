@@ -10,13 +10,14 @@ const authenticateMiddleware = async (req, res, next) => {
     const { token } = req.cookies;
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const freelancer = await Freelancer.findOne({ _id: decoded.id });
-    const { _id, email, firstName, lastName } = freelancer;
+    const { _id, email, firstName, lastName, image } = freelancer;
 
-    req.user = {
+    req.freelancer = {
       _id,
       email,
       firstName,
-      lastName
+      lastName,
+      image
     };
 
     next();
