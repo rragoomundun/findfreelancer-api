@@ -17,7 +17,8 @@
     "AuthResetPassword",
     "AuthAuthorized",
     "Freelancer",
-    "FreelancerGetMe"
+    "FreelancerGetMe",
+    "FreelancerSettingsUpdateIdentity"
   ],
   "template": {
     "forceLanguage": "en",
