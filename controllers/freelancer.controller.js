@@ -108,9 +108,30 @@ const updateGeneral = async (req, res) => {
   const { _id } = req.freelancer;
   const { image, town, countryCode, hourlyRate } = req.body;
 
-  await Freelancer.findByIdAndUpdate(_id.toString(), { image, location: { town, countryCode }, hourlyRate });
+  await Freelancer.findByIdAndUpdate(_id, { image, location: { town, countryCode }, hourlyRate });
 
   res.status(httpStatus.OK).end();
 };
 
-export { getMe, updateIdentity, updateSecurity, deleteAccount, updateGeneral };
+/**
+ * @api {PUT} /freelancer/profile/presentation Update Presentation Information
+ * @apiGroup Freelancer
+ * @apiName FreelancerUpdatePresentation
+ *
+ * @apiDescription Update a freelancer presentation profil's information
+ *
+ * @apiBody {String} title The title of the freelancer
+ * @apiBody {String} presentationText The presentation text of the freelancer
+ *
+ * @apiPermission Private
+ */
+const updatePresentation = async (req, res) => {
+  const { _id } = req.freelancer;
+  const { title, presentationText } = req.body;
+
+  await Freelancer.findByIdAndUpdate(_id, { title, presentationText });
+
+  res.status(httpStatus.OK).end();
+};
+
+export { getMe, updateIdentity, updateSecurity, deleteAccount, updateGeneral, updatePresentation };
