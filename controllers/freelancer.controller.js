@@ -90,4 +90,27 @@ const deleteAccount = async (req, res) => {
   res.status(httpStatus.OK).end();
 };
 
-export { getMe, updateIdentity, updateSecurity, deleteAccount };
+/**
+ * @api {PUT} /freelancer/profile/general Update General Information
+ * @apiGroup Freelancer
+ * @apiName FreelancerUpdateGeneral
+ *
+ * @apiDescription Update a freelancer general profil's information.
+ *
+ * @apiBody {String} image The freelancer profile picture link
+ * @apiBody {String} town The freelancer town
+ * @apiBody {String} countryCode The freelancer country code
+ * @apiBody {Number} hourlyRate The freelancer hourly rate
+ *
+ * @apiPermission Private
+ */
+const updateGeneral = async (req, res) => {
+  const { _id } = req.freelancer;
+  const { image, town, countryCode, hourlyRate } = req.body;
+
+  await Freelancer.findByIdAndUpdate(_id, { image, town, countryCode, hourlyRate });
+
+  res.status(httpStatus.OK).end();
+};
+
+export { getMe, updateIdentity, updateSecurity, deleteAccount, updateGeneral };

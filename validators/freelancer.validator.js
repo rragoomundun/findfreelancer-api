@@ -1,5 +1,7 @@
 import { body } from 'express-validator';
 
+import countries from '../misc/countries.js';
+
 import Freelancer from '../models/Freelancer.js';
 
 import validation from './validation.js';
@@ -41,4 +43,23 @@ const securityValidator = validation([
     })
 ]);
 
-export { identityValidator, securityValidator };
+const generalValidator = validation([
+  body('town').notEmpty().withMessage('EMPTY'),
+  body('countryCode')
+    .notEmpty()
+    .withMessage('EMPTY')
+    .custom((value) => {
+      const countryCodes = countries.map((country) => country.isoAlpha2);
+
+      if (countryCodes.includes(value) === false) {
+        throw new Error('INVALID_COUNTRY_CODE');
+      }
+    }),
+  body('hourlyRate')
+    .notEmpty()
+    .withMessage('EMPTY')
+    .isInt({ min: 5, max: 100 })
+    .withMessage('INVALID_HOURLY_RATE_RANGE')
+]);
+
+export { identityValidator, securityValidator, generalValidator };
