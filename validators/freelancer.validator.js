@@ -62,4 +62,14 @@ const generalValidator = validation([
     .withMessage('INVALID_HOURLY_RATE_RANGE')
 ]);
 
-export { identityValidator, securityValidator, generalValidator };
+const skillsValidator = validation([
+  body('skills').custom((value) => {
+    for (const val of value) {
+      if (typeof val !== 'string') {
+        throw new Error('INVALID_SKILLS');
+      }
+    }
+  })
+]);
+
+export { identityValidator, securityValidator, generalValidator, skillsValidator };
