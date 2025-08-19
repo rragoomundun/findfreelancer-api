@@ -134,4 +134,28 @@ const updatePresentation = async (req, res) => {
   res.status(httpStatus.OK).end();
 };
 
-export { getMe, updateIdentity, updateSecurity, deleteAccount, updateGeneral, updatePresentation };
+/**
+ * @api {PUT} /freelancer/profile/skills Update Skills
+ * @apiGroup Freelancer
+ * @apiName FreelancerUpdateSkills
+ *
+ * @apiDescription Update a freelancer skills
+ *
+ * @apiBody {String[]} skills The skills of the freelancer
+ *
+ * @apiPermission Private
+ */
+const updateSkills = async (req, res) => {
+  const { _id } = req.freelancer;
+  const { skills } = req.body;
+
+  for (let i = 0; i < skills.length; i++) {
+    skills[i] = skills[i].toLowerCase();
+  }
+
+  await Freelancer.findByIdAndUpdate(_id, { skills });
+
+  res.status(httpStatus.OK).end();
+};
+
+export { getMe, updateIdentity, updateSecurity, deleteAccount, updateGeneral, updatePresentation, updateSkills };
