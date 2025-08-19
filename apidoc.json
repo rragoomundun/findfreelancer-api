@@ -18,7 +18,8 @@
     "AuthAuthorized",
     "Freelancer",
     "FreelancerGetMe",
-    "FreelancerSettingsUpdateIdentity"
+    "FreelancerSettingsUpdateIdentity",
+    "FreelancerSettingsUpdateSecurity"
   ],
   "template": {
     "forceLanguage": "en",
