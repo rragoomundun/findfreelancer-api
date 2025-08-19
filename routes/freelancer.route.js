@@ -5,7 +5,8 @@ import {
   updateIdentity,
   updateSecurity,
   deleteAccount,
-  updateGeneral
+  updateGeneral,
+  updatePresentation
 } from '../controllers/freelancer.controller.js';
 
 import { identityValidator, securityValidator, generalValidator } from '../validators/freelancer.validator.js';
@@ -19,6 +20,7 @@ router
   .put('/settings/identity', authenticateMiddleware, identityValidator, updateIdentity)
   .put('/settings/security', authenticateMiddleware, securityValidator, updateSecurity)
   .delete('/', authenticateMiddleware, deleteAccount)
-  .put('/profile/general', authenticateMiddleware, generalValidator, updateGeneral);
+  .put('/profile/general', authenticateMiddleware, generalValidator, updateGeneral)
+  .put('/profile/presentation', authenticateMiddleware, updatePresentation);
 
 export default router;
