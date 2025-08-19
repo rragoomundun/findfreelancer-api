@@ -108,7 +108,7 @@ const updateGeneral = async (req, res) => {
   const { _id } = req.freelancer;
   const { image, town, countryCode, hourlyRate } = req.body;
 
-  await Freelancer.findByIdAndUpdate(_id, { image, town, countryCode, hourlyRate });
+  await Freelancer.findByIdAndUpdate(_id.toString(), { image, location: { town, countryCode }, hourlyRate });
 
   res.status(httpStatus.OK).end();
 };
