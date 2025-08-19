@@ -19,7 +19,8 @@
     "Freelancer",
     "FreelancerGetMe",
     "FreelancerSettingsUpdateIdentity",
-    "FreelancerSettingsUpdateSecurity"
+    "FreelancerSettingsUpdateSecurity",
+    "FreelancerDelete"
   ],
   "template": {
     "forceLanguage": "en",

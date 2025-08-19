@@ -73,4 +73,21 @@ const updateSecurity = async (req, res) => {
   res.status(httpStatus.OK).end();
 };
 
-export { getMe, updateIdentity, updateSecurity };
+/**
+ * @api {DELETE} /freelancer Delete Account
+ * @apiGroup Freelancer
+ * @apiName FreelancerDelete
+ *
+ * @apiDescription Delete freelancer.
+ *
+ * @apiPermission Private
+ */
+const deleteAccount = async (req, res) => {
+  const { _id } = req.freelancer;
+
+  await Freelancer.findByIdAndDelete(_id);
+
+  res.status(httpStatus.OK).end();
+};
+
+export { getMe, updateIdentity, updateSecurity, deleteAccount };
