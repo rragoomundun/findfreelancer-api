@@ -47,4 +47,30 @@ const updateIdentity = async (req, res) => {
   res.status(httpStatus.OK).end();
 };
 
-export { getMe, updateIdentity };
+/**
+ * @api {PUT} /freelancer/settings/security Update Security
+ * @apiGroup Freelancer
+ * @apiName FreelancerSettingsUpdateSecurity
+ *
+ * @apiDescription Updates a freelancer's security information.
+ *
+ * @apiBody {String} password The updated password
+ * @apiBody {String} passwordConfirmation The password confirmation
+ *
+ * @apiError (Error (400)) INVALID_PARAMETERS One or more parameters are invalid
+ *
+ * @apiPermission Private
+ */
+const updateSecurity = async (req, res) => {
+  const { _id } = req.freelancer;
+  const { password } = req.body;
+  const freelancer = await Freelancer.findById(_id);
+
+  freelancer.password = password;
+
+  await freelancer.save();
+
+  res.status(httpStatus.OK).end();
+};
+
+export { getMe, updateIdentity, updateSecurity };
