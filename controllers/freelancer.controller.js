@@ -197,6 +197,30 @@ const getLanguages = async (req, res) => {
 };
 
 /**
+ * @api {GET} /freelancer/contact Get Contact
+ * @apiGroup Freelancer
+ * @apiName FreelancerGetContact
+ *
+ * @apiDescription Get freelancer's contact information.
+ *
+ * @apiSuccess (Success (200)) {String} email The contact email
+ * @apiSuccess (Success (200)) {String} phone The contact phone number
+ *
+ * @apiPermission Private
+ */
+const getContact = async (req, res) => {
+  const { _id } = req.freelancer;
+  const freelancer = await Freelancer.findById(_id).select({
+    _id: 0,
+    contact: 1
+  });
+
+  res.status(httpStatus.OK).json({
+    ...freelancer.contact
+  });
+};
+
+/**
  * @api {PUT} /freelancer/settings/identity Update Identity
  * @apiGroup Freelancer
  * @apiName FreelancerSettingsUpdateIdentity
@@ -420,6 +444,7 @@ export {
   getExperiences,
   getEducation,
   getLanguages,
+  getContact,
   updateIdentity,
   updateSecurity,
   deleteAccount,
