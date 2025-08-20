@@ -4,6 +4,7 @@ import {
   getMe,
   getGeneral,
   getPresentation,
+  getSkills,
   updateIdentity,
   updateSecurity,
   deleteAccount,
@@ -35,6 +36,7 @@ router
   .get('/', authenticateMiddleware, getMe)
   .get('/general', authenticateMiddleware, getGeneral)
   .get('/presentation', authenticateMiddleware, getPresentation)
+  .get('/skills', authenticateMiddleware, getSkills)
   .put('/settings/identity', authenticateMiddleware, identityValidator, updateIdentity)
   .put('/settings/security', authenticateMiddleware, securityValidator, updateSecurity)
   .delete('/', authenticateMiddleware, deleteAccount)
