@@ -8,6 +8,7 @@ import {
   getExperiences,
   getEducation,
   getLanguages,
+  getContact,
   updateIdentity,
   updateSecurity,
   deleteAccount,
@@ -43,6 +44,7 @@ router
   .get('/experiences', authenticateMiddleware, getExperiences)
   .get('/education', authenticateMiddleware, getEducation)
   .get('/languages', authenticateMiddleware, getLanguages)
+  .get('/contact', authenticateMiddleware, getContact)
   .put('/settings/identity', authenticateMiddleware, identityValidator, updateIdentity)
   .put('/settings/security', authenticateMiddleware, securityValidator, updateSecurity)
   .delete('/', authenticateMiddleware, deleteAccount)
