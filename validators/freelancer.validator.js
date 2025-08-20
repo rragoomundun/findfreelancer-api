@@ -112,7 +112,7 @@ const languagesValidator = validation([
     .custom((value) => {
       const languagesCodes = languages.map((language) => language.code);
 
-      if (languagesCodes.includes(value)) {
+      if (languagesCodes.includes(value) === false) {
         throw new Error('INVALID_LANGUAGE');
       }
     }),
@@ -120,6 +120,7 @@ const languagesValidator = validation([
     .notEmpty()
     .withMessage('EMPTY')
     .isIn(['basic', 'conversational', 'fluent', 'native-bilingual'])
+    .withMessage('INVALID_LANGUAGE_LEVEL')
 ]);
 
 export {
