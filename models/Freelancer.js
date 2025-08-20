@@ -105,6 +105,10 @@ const FreelancerSchema = new Schema(
         }
       }
     ],
+    contact: {
+      email: String,
+      phone: String
+    },
     tokens: [
       {
         value: {

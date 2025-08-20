@@ -218,6 +218,27 @@ const updateLanguages = async (req, res) => {
   res.status(httpStatus.OK).end();
 };
 
+/**
+ * @api {PUT} /freelancer/profile/contact Update Contact Information
+ * @apiGroup Freelancer
+ * @apiName FreelancerUpdateContact
+ *
+ * @apiDescription Update a freelancer contact information
+ *
+ * @apiBody {String} email The contact email
+ * @apiBody {String} phone The contact phone number
+ *
+ * @apiPermission Private
+ */
+const updateContact = async (req, res) => {
+  const { _id } = req.freelancer;
+  const { email, phone } = req.body;
+
+  await Freelancer.findByIdAndUpdate(_id, { contact: { email, phone } });
+
+  res.status(httpStatus.OK).end();
+};
+
 export {
   getMe,
   updateIdentity,
@@ -228,5 +249,6 @@ export {
   updateSkills,
   updateExperiences,
   updateEducation,
-  updateLanguages
+  updateLanguages,
+  updateContact
 };
