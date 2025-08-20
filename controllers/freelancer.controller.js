@@ -175,6 +175,28 @@ const getEducation = async (req, res) => {
 };
 
 /**
+ * @api {GET} /freelancer/languages Get Languages
+ * @apiGroup Freelancer
+ * @apiName FreelancerGetLanguages
+ *
+ * @apiDescription Get freelancer's languages.
+ *
+ * @apiSuccess (Success (200)) {String} code The language's code
+ * @apiSuccess (Success (200)) {String} level The language's level
+ *
+ * @apiPermission Private
+ */
+const getLanguages = async (req, res) => {
+  const { _id } = req.freelancer;
+  const freelancer = await Freelancer.findById(_id).select({
+    _id: 0,
+    languages: 1
+  });
+
+  res.status(httpStatus.OK).json(freelancer.languages);
+};
+
+/**
  * @api {PUT} /freelancer/settings/identity Update Identity
  * @apiGroup Freelancer
  * @apiName FreelancerSettingsUpdateIdentity
@@ -397,6 +419,7 @@ export {
   getSkills,
   getExperiences,
   getEducation,
+  getLanguages,
   updateIdentity,
   updateSecurity,
   deleteAccount,
