@@ -24,6 +24,37 @@ const getMe = async (req, res) => {
 };
 
 /**
+ * @api {GET} /freelancer/general Get General Information
+ * @apiGroup Freelancer
+ * @apiName FreelancerGetGeneral
+ *
+ * @apiDescription Get freelancer general information.
+ *
+ * @apiSuccess (Success (200)) {String} image The freelancer's profile picture
+ * @apiSuccess (Success (200)) {String} town The freelancer's town
+ * @apiSuccess (Success (200)) {String} countryCode The freelancer's country code
+ * @apiSuccess (Success (200)) {String} hourlyRate The freelancer's hourly rate
+ *
+ * @apiPermission Private
+ */
+const getGeneral = async (req, res) => {
+  const { _id } = req.freelancer;
+  const freelancer = await Freelancer.findById(_id).select({
+    _id: 0,
+    image: 1,
+    hourlyRate: 1,
+    location: 1
+  });
+
+  res.status(httpStatus.OK).json({
+    image: freelancer.image,
+    hourlyRate: freelancer.hourlyRate,
+    town: freelancer.location.town,
+    countryCode: freelancer.location.countryCode
+  });
+};
+
+/**
  * @api {PUT} /freelancer/settings/identity Update Identity
  * @apiGroup Freelancer
  * @apiName FreelancerSettingsUpdateIdentity
@@ -241,6 +272,7 @@ const updateContact = async (req, res) => {
 
 export {
   getMe,
+  getGeneral,
   updateIdentity,
   updateSecurity,
   deleteAccount,
