@@ -32,7 +32,7 @@ const s3 = new S3Client({
  * @apiPermission Private
  */
 
-const uploadFile = async (req, res, next) => {
+const uploadFile = async (req, res) => {
   const { file } = req;
   const params = {
     Bucket: process.env.AWS_S3_BUCKET_NAME,
@@ -49,8 +49,37 @@ const uploadFile = async (req, res, next) => {
       key: params.Key
     });
   } catch {
-    next(new ErrorResponse('Upload failed', httpStatus.INTERNAL_SERVER_ERROR, 'UPLOAD_FAILED'));
+    throw new ErrorResponse('Upload failed', httpStatus.INTERNAL_SERVER_ERROR, 'UPLOAD_FAILED');
   }
 };
 
-export { uploadFile };
+/**
+ * @api {DELETE} /file Delete file
+ * @apiGroup File
+ * @apiName FileDelete
+ *
+ * @apiDescription Delete a file.
+ *
+ * @apiBody {String} fileName The path to the file
+ *
+ * @apiError (Error (400)) INVALID_PARAMETERS One or more parameters are invalid.
+ * @apiError (Error (500)) DELETION_FAILED Cannot delete file
+ *
+ * @apiPermission Private
+ */
+const deleteFile = async (req, res) => {
+  const { fileName } = req.body;
+  const params = {
+    Bucket: process.env.AWS_S3_BUCKET_NAME,
+    Key: fileName
+  };
+
+  try {
+    await s3.send(new DeleteObjectCommand(params));
+    res.status(httpStatus.OK).end();
+  } catch {
+    throw new ErrorResponse('Cannot delete file', httpStatus.INTERNAL_SERVER_ERROR, 'DELETION_FAILED');
+  }
+};
+
+export { uploadFile, deleteFile };

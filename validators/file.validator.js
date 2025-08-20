@@ -24,4 +24,6 @@ const fileUploadValidator = validation([
   })
 ]);
 
-export { fileUploadValidator };
+const fileDeleteValidator = validation([body('fileName').notEmpty().withMessage('EMPTY')]);
+
+export { fileUploadValidator, fileDeleteValidator };
