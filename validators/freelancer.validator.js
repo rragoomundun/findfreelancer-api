@@ -1,6 +1,7 @@
 import { body } from 'express-validator';
 
 import countries from '../misc/countries.js';
+import languages from '../misc/languages.js';
 
 import Freelancer from '../models/Freelancer.js';
 
@@ -103,11 +104,30 @@ const educationValidator = validation([
   body('education.*.description').notEmpty().withMessage('EMPTY')
 ]);
 
+const languagesValidator = validation([
+  body('languages').isArray().withMessage('NOT_ARRAY'),
+  body('languages.*.code')
+    .notEmpty()
+    .withMessage('EMPTY')
+    .custom((value) => {
+      const languagesCodes = languages.map((language) => language.code);
+
+      if (languagesCodes.includes(value)) {
+        throw new Error('INVALID_LANGUAGE');
+      }
+    }),
+  body('languages.*.level')
+    .notEmpty()
+    .withMessage('EMPTY')
+    .isIn(['basic', 'conversational', 'fluent', 'native-bilingual'])
+]);
+
 export {
   identityValidator,
   securityValidator,
   generalValidator,
   skillsValidator,
   experiencesValidator,
-  educationValidator
+  educationValidator,
+  languagesValidator
 };
