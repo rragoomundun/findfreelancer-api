@@ -22,7 +22,8 @@ const s3 = new S3Client({
  *
  * @apiSuccessExample Success Example
  * {
- *   "link": "img.bucketname.net/users/68a5ac5f23f5568efe176431/1723795173514.jpeg"
+ *   "link": "https://s3.eu-west-1.bucketname.com/freelancers/68a5ac5f23f5568efe176431/1723795173514.jpeg",
+ *   "key": "freelancers/68a5ac5f23f5568efe176431/1723795173514.jpeg"
  * }
  *
  * @apiError (Error (400)) INVALID_PARAMETERS The file parameter is invalid
