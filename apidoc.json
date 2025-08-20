@@ -36,7 +36,8 @@
     "FreelancerUpdateLanguages",
     "FreelancerUpdateContact",
     "File",
-    "FileUpload"
+    "FileUpload",
+    "FileDelete"
   ],
   "template": {
     "forceLanguage": "en",
