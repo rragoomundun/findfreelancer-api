@@ -198,6 +198,26 @@ const updateEducation = async (req, res) => {
   res.status(httpStatus.OK).end();
 };
 
+/**
+ * @api {PUT} /freelancer/profile/languages Update Languages
+ * @apiGroup Freelancer
+ * @apiName FreelancerUpdateLanguages
+ *
+ * @apiDescription Update a freelancer languages
+ *
+ * @apiBody {Object[]} languages The languages of the freelancer
+ *
+ * @apiPermission Private
+ */
+const updateLanguages = async (req, res) => {
+  const { _id } = req.freelancer;
+  const { languages } = req.body;
+
+  await Freelancer.findByIdAndUpdate(_id, { languages });
+
+  res.status(httpStatus.OK).end();
+};
+
 export {
   getMe,
   updateIdentity,
@@ -207,5 +227,6 @@ export {
   updatePresentation,
   updateSkills,
   updateExperiences,
-  updateEducation
+  updateEducation,
+  updateLanguages
 };
