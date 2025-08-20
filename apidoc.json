@@ -33,7 +33,9 @@
     "FreelancerUpdateExperiences",
     "FreelancerUpdateEducation",
     "FreelancerUpdateLanguages",
-    "FreelancerUpdateContact"
+    "FreelancerUpdateContact",
+    "File",
+    "FileUpload"
   ],
   "template": {
     "forceLanguage": "en",
