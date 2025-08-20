@@ -21,6 +21,7 @@
     "FreelancerGetGeneral",
     "FreelancerGetPresentation",
     "FreelancerGetSkills",
+    "FreelancerGetExperiences",
     "FreelancerSettingsUpdateIdentity",
     "FreelancerSettingsUpdateSecurity",
     "FreelancerDelete",

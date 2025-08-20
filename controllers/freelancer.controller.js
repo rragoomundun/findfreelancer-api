@@ -102,6 +102,43 @@ const getSkills = async (req, res) => {
 };
 
 /**
+ * @api {GET} /freelancer/experiences Get Experiences
+ * @apiGroup Freelancer
+ * @apiName FreelancerGetExperiences
+ *
+ * @apiDescription Get freelancer's experiences.
+ *
+ * @apiSuccess (Success (200)) {String} title The experience title
+ * @apiSuccess (Success (200)) {String} organization The organization
+ * @apiSuccess (Success (200)) {String} town The town
+ * @apiSuccess (Success (200)) {String} countryCode The country code
+ * @apiSuccess (Success (200)) {Date} startDate The start date of the experience
+ * @apiSuccess (Success (200)) {Date} endDate The end date of the experience
+ * @apiSuccess (Success (200)) {String} description The description of the experience
+ *
+ * @apiPermission Private
+ */
+const getExperiences = async (req, res) => {
+  const { _id } = req.freelancer;
+  const freelancer = await Freelancer.findById(_id).select({
+    _id: 0,
+    experiences: 1
+  });
+
+  freelancer.experiences = freelancer.experiences.sort((experience1, experience2) => {
+    if (experience1.endDate < experience2.endDate) {
+      return -1;
+    } else if (experience1.endDate < experience2.endDate) {
+      return 1;
+    }
+
+    return 0;
+  });
+
+  res.status(httpStatus.OK).json(freelancer.experiences);
+};
+
+/**
  * @api {PUT} /freelancer/settings/identity Update Identity
  * @apiGroup Freelancer
  * @apiName FreelancerSettingsUpdateIdentity
@@ -322,6 +359,7 @@ export {
   getGeneral,
   getPresentation,
   getSkills,
+  getExperiences,
   updateIdentity,
   updateSecurity,
   deleteAccount,
