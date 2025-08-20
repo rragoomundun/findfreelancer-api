@@ -8,7 +8,8 @@ import {
   updateGeneral,
   updatePresentation,
   updateSkills,
-  updateExperiences
+  updateExperiences,
+  updateEducation
 } from '../controllers/freelancer.controller.js';
 
 import {
@@ -16,7 +17,8 @@ import {
   securityValidator,
   generalValidator,
   skillsValidator,
-  experiencesValidator
+  experiencesValidator,
+  educationValidator
 } from '../validators/freelancer.validator.js';
 
 import authenticateMiddleware from '../middlewares/authenticate.middleware.js';
@@ -31,6 +33,7 @@ router
   .put('/profile/general', authenticateMiddleware, generalValidator, updateGeneral)
   .put('/profile/presentation', authenticateMiddleware, updatePresentation)
   .put('/profile/skills', authenticateMiddleware, skillsValidator, updateSkills)
-  .put('/profile/experiences', authenticateMiddleware, experiencesValidator, updateExperiences);
+  .put('/profile/experiences', authenticateMiddleware, experiencesValidator, updateExperiences)
+  .put('/profile/education', authenticateMiddleware, educationValidator, updateEducation);
 
 export default router;

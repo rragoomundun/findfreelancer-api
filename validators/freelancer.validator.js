@@ -75,8 +75,7 @@ const experiencesValidator = validation([
   body('experiences.*.title').notEmpty().withMessage('EMPTY'),
   body('experiences.*.organization').notEmpty().withMessage('EMPTY'),
   body('experiences.*.town').notEmpty().withMessage('EMPTY'),
-  body('experiences.*.startDate').notEmpty().withMessage('EMPTY').isDate('NOT_DATE'),
-  body('experiences.*.endDate').isDate('NOT_DATE'),
+  body('experiences.*.startDate').notEmpty().withMessage('EMPTY').isDate().withMessage('NOT_DATE'),
   body('experiences.*.description').notEmpty().withMessage('EMPTY'),
   body('experiences.*.countryCode')
     .notEmpty()
@@ -88,4 +87,27 @@ const experiencesValidator = validation([
     })
 ]);
 
-export { identityValidator, securityValidator, generalValidator, skillsValidator, experiencesValidator };
+const educationValidator = validation([
+  body('education').isArray().withMessage('NOT_ARRAY'),
+  body('education.*.school').notEmpty().withMessage('EMPTY'),
+  body('education.*.town').notEmpty().withMessage('EMPTY'),
+  body('education.*.countryCode')
+    .notEmpty()
+    .withMessage('EMPTY')
+    .custom((value) => {
+      if (countries.includes(value) === false) {
+        throw new Error('INVALID_COUNTRY_CODE');
+      }
+    }),
+  body('education.*.startDate').notEmpty().withMessage('EMPTY').isDate().withMessage('NOT_DATE'),
+  body('education.*.description').notEmpty().withMessage('EMPTY')
+]);
+
+export {
+  identityValidator,
+  securityValidator,
+  generalValidator,
+  skillsValidator,
+  experiencesValidator,
+  educationValidator
+};
