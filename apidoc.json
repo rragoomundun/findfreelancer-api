@@ -22,7 +22,8 @@
     "FreelancerSettingsUpdateSecurity",
     "FreelancerDelete",
     "FreelancerUpdateGeneral",
-    "FreelancerUpdateSkills"
+    "FreelancerUpdateSkills",
+    "FreelancerUpdateExperiences"
   ],
   "template": {
     "forceLanguage": "en",

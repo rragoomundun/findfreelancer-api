@@ -7,14 +7,16 @@ import {
   deleteAccount,
   updateGeneral,
   updatePresentation,
-  updateSkills
+  updateSkills,
+  updateExperiences
 } from '../controllers/freelancer.controller.js';
 
 import {
   identityValidator,
   securityValidator,
   generalValidator,
-  skillsValidator
+  skillsValidator,
+  experiencesValidator
 } from '../validators/freelancer.validator.js';
 
 import authenticateMiddleware from '../middlewares/authenticate.middleware.js';
@@ -28,6 +30,7 @@ router
   .delete('/', authenticateMiddleware, deleteAccount)
   .put('/profile/general', authenticateMiddleware, generalValidator, updateGeneral)
   .put('/profile/presentation', authenticateMiddleware, updatePresentation)
-  .put('/profile/skills', authenticateMiddleware, skillsValidator, updateSkills);
+  .put('/profile/skills', authenticateMiddleware, skillsValidator, updateSkills)
+  .put('/profile/experiences', authenticateMiddleware, experiencesValidator, updateExperiences);
 
 export default router;

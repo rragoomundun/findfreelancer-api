@@ -49,9 +49,7 @@ const generalValidator = validation([
     .notEmpty()
     .withMessage('EMPTY')
     .custom((value) => {
-      const countryCodes = countries.map((country) => country.isoAlpha2);
-
-      if (countryCodes.includes(value) === false) {
+      if (countries.includes(value) === false) {
         throw new Error('INVALID_COUNTRY_CODE');
       }
     }),
@@ -72,4 +70,22 @@ const skillsValidator = validation([
   })
 ]);
 
-export { identityValidator, securityValidator, generalValidator, skillsValidator };
+const experiencesValidator = validation([
+  body('experiences').isArray().withMessage('NOT_ARRAY'),
+  body('experiences.*.title').notEmpty().withMessage('EMPTY'),
+  body('experiences.*.organization').notEmpty().withMessage('EMPTY'),
+  body('experiences.*.town').notEmpty().withMessage('EMPTY'),
+  body('experiences.*.startDate').notEmpty().withMessage('EMPTY').isDate('NOT_DATE'),
+  body('experiences.*.endDate').isDate('NOT_DATE'),
+  body('experiences.*.description').notEmpty().withMessage('EMPTY'),
+  body('experiences.*.countryCode')
+    .notEmpty()
+    .withMessage('EMPTY')
+    .custom((value) => {
+      if (countries.includes(value) === false) {
+        throw new Error('INVALID_COUNTRY_CODE');
+      }
+    })
+]);
+
+export { identityValidator, securityValidator, generalValidator, skillsValidator, experiencesValidator };
