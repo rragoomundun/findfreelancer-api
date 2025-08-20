@@ -57,8 +57,7 @@ const FreelancerSchema = new Schema(
           required: true
         },
         endDate: {
-          type: Date,
-          required: true
+          type: Date
         },
         description: {
           type: String,
