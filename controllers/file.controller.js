@@ -48,8 +48,7 @@ const uploadFile = async (req, res, next) => {
       link: `https://s3.${process.env.AWS_S3_REGION}.amazonaws.com/${params.Bucket}/${params.Key}`,
       key: params.Key
     });
-  } catch (e) {
-    console.log(e);
+  } catch {
     next(new ErrorResponse('Upload failed', httpStatus.INTERNAL_SERVER_ERROR, 'UPLOAD_FAILED'));
   }
 };
