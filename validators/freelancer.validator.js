@@ -123,6 +123,8 @@ const languagesValidator = validation([
     .withMessage('INVALID_LANGUAGE_LEVEL')
 ]);
 
+const contactValidator = validation([body('email').optional({ values: 'falsy' }).isEmail().withMessage('NOT_EMAIL')]);
+
 export {
   identityValidator,
   securityValidator,
@@ -130,5 +132,6 @@ export {
   skillsValidator,
   experiencesValidator,
   educationValidator,
-  languagesValidator
+  languagesValidator,
+  contactValidator
 };

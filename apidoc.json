@@ -26,7 +26,8 @@
     "FreelancerUpdateSkills",
     "FreelancerUpdateExperiences",
     "FreelancerUpdateEducation",
-    "FreelancerUpdateLanguages"
+    "FreelancerUpdateLanguages",
+    "FreelancerUpdateContact"
   ],
   "template": {
     "forceLanguage": "en",
