@@ -193,7 +193,7 @@ const updateEducation = async (req, res) => {
   const { _id } = req.freelancer;
   const { education } = req.body;
 
-  await Freelancer.findByIdAndUpdate(_id, { education });
+  await Freelancer.findByIdAndUpdate(_id, { educations: education });
 
   res.status(httpStatus.OK).end();
 };
