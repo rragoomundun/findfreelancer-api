@@ -178,6 +178,26 @@ const updateExperiences = async (req, res) => {
   res.status(httpStatus.OK).end();
 };
 
+/**
+ * @api {PUT} /freelancer/profile/education Update Education
+ * @apiGroup Freelancer
+ * @apiName FreelancerUpdateEducation
+ *
+ * @apiDescription Update a freelancer education
+ *
+ * @apiBody {Object[]} education The education of the freelancer
+ *
+ * @apiPermission Private
+ */
+const updateEducation = async (req, res) => {
+  const { _id } = req.freelancer;
+  const { education } = req.body;
+
+  await Freelancer.findByIdAndUpdate(_id, { education });
+
+  res.status(httpStatus.OK).end();
+};
+
 export {
   getMe,
   updateIdentity,
@@ -186,5 +206,6 @@ export {
   updateGeneral,
   updatePresentation,
   updateSkills,
-  updateExperiences
+  updateExperiences,
+  updateEducation
 };
