@@ -80,11 +80,13 @@ const versionPrefix = '/v1';
 import apiRoute from './routes/api.route.js';
 import authRoute from './routes/auth.route.js';
 import freelancerRoute from './routes/freelancer.route.js';
+import fileRoute from './routes/file.route.js';
 
 // Mount router
 app.use(`${versionPrefix}/api`, apiRoute);
 app.use(`${versionPrefix}/auth`, authRoute);
 app.use(`${versionPrefix}/freelancer`, freelancerRoute);
+app.use(`${versionPrefix}/file`, fileRoute);
 
 // Errors
 app.use(notFoundMiddleware);
