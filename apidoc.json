@@ -18,6 +18,8 @@
     "AuthAuthorized",
     "Freelancer",
     "FreelancerGetMe",
+    "FreelancerGetGeneral",
+    "FreelancerGetPresentation",
     "FreelancerSettingsUpdateIdentity",
     "FreelancerSettingsUpdateSecurity",
     "FreelancerDelete",

@@ -55,6 +55,32 @@ const getGeneral = async (req, res) => {
 };
 
 /**
+ * @api {GET} /freelancer/presentation Get Presentation Information
+ * @apiGroup Freelancer
+ * @apiName FreelancerGetPresentation
+ *
+ * @apiDescription Get freelancer's presentation information.
+ *
+ * @apiSuccess (Success (200)) {String} title The freelancer's title
+ * @apiSuccess (Success (200)) {String} presentationText The freelancer's presentation text
+ *
+ * @apiPermission Private
+ */
+const getPresentation = async (req, res) => {
+  const { _id } = req.freelancer;
+  const freelancer = await Freelancer.findById(_id).select({
+    _id: 0,
+    title: 1,
+    presentationText: 1
+  });
+
+  res.status(httpStatus.OK).json({
+    title: freelancer.title,
+    presentationText: freelancer.presentationText
+  });
+};
+
+/**
  * @api {PUT} /freelancer/settings/identity Update Identity
  * @apiGroup Freelancer
  * @apiName FreelancerSettingsUpdateIdentity
@@ -273,6 +299,7 @@ const updateContact = async (req, res) => {
 export {
   getMe,
   getGeneral,
+  getPresentation,
   updateIdentity,
   updateSecurity,
   deleteAccount,

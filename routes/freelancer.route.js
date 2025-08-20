@@ -3,6 +3,7 @@ import express from 'express';
 import {
   getMe,
   getGeneral,
+  getPresentation,
   updateIdentity,
   updateSecurity,
   deleteAccount,
@@ -33,6 +34,7 @@ const router = express.Router();
 router
   .get('/', authenticateMiddleware, getMe)
   .get('/general', authenticateMiddleware, getGeneral)
+  .get('/presentation', authenticateMiddleware, getPresentation)
   .put('/settings/identity', authenticateMiddleware, identityValidator, updateIdentity)
   .put('/settings/security', authenticateMiddleware, securityValidator, updateSecurity)
   .delete('/', authenticateMiddleware, deleteAccount)
