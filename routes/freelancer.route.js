@@ -2,6 +2,8 @@ import express from 'express';
 
 import {
   getMe,
+  getFreelancer,
+  getFreelancerVisibility,
   getGeneral,
   getPresentation,
   getSkills,
@@ -38,6 +40,8 @@ const router = express.Router();
 
 router
   .get('/', authenticateMiddleware, getMe)
+  .get('/:id', getFreelancer)
+  .get('/:id/visibility', getFreelancerVisibility)
   .get('/general', authenticateMiddleware, getGeneral)
   .get('/presentation', authenticateMiddleware, getPresentation)
   .get('/skills', authenticateMiddleware, getSkills)
