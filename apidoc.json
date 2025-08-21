@@ -18,6 +18,8 @@
     "AuthAuthorized",
     "Freelancer",
     "FreelancerGetMe",
+    "FreelancerGetFreelancer",
+    "FreelancerGetVisibility",
     "FreelancerGetGeneral",
     "FreelancerGetPresentation",
     "FreelancerGetSkills",
