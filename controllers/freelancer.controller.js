@@ -2,6 +2,10 @@ import httpStatus from 'http-status-codes';
 
 import Freelancer from '../models/Freelancer.js';
 
+import { isFreelancerPublic } from '../utils/freelancer.util.js';
+
+import ErrorResponse from '../classes/ErrorResponse.js';
+
 /**
  * @api {GET} /freelancer Get Me
  * @apiGroup Freelancer
@@ -21,6 +25,163 @@ import Freelancer from '../models/Freelancer.js';
  */
 const getMe = async (req, res) => {
   res.status(httpStatus.OK).json(req.freelancer);
+};
+
+/**
+ * @api {GET} /freelancer/:id Get Freelancer
+ * @apiGroup Freelancer
+ * @apiName FreelancerGetFreelancer
+ *
+ * @apiDescription Get a specific freelancer.
+ *
+ * @apiParam {String} id The freelancer's id
+ *
+ * @apiSuccess (Success (200)) {String} _id The freelancer's id
+ * @apiSuccess (Success (200)) {String} email The freelancer's email
+ * @apiSuccess (Success (200)) {String} firstName The freelancer's first name
+ * @apiSuccess (Success (200)) {String} lastName The freelancer's last name
+ * @apiSuccess (Success (200)) {String} image The freelancer's profile picture
+ * @apiSuccess (Success (200)) {Object} location The freelancer's location
+ * @apiSuccess (Success (200)) {Number} hourlyRate The freelancer's hourly rate
+ * @apiSuccess (Success (200)) {String} title The freelancer's title
+ * @apiSuccess (Success (200)) {String} presentationText The freelancer's presentation text
+ * @apiSuccess (Success (200)) {String[]} skills The freelancer's skills
+ * @apiSuccess (Success (200)) {Object[]} experiences The freelancer's experiences
+ * @apiSuccess (Success (200)) {Object[]} education The freelancer's educations
+ * @apiSuccess (Success (200)) {Object[]} languages The freelancer's spoken languages
+ * @apiSuccess (Success (200)) {Object} contact The freelancer's contact information
+ *
+ * @apiPermission Public
+ */
+const getFreelancer = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const freelancer = await Freelancer.findById(id).select({
+      _id: 1,
+      email: 1,
+      firstName: 1,
+      lastName: 1,
+      image: 1,
+      location: 1,
+      hourlyRate: 1,
+      title: 1,
+      presentationText: 1,
+      skills: 1,
+      experiences: 1,
+      educations: 1,
+      languages: 1,
+      contact: 1
+    });
+
+    if (freelancer === null || isFreelancerPublic(freelancer) === false) {
+      throw new Error();
+    }
+
+    freelancer.experiences = freelancer.experiences.sort((experience1, experience2) => {
+      if (experience1.endDate < experience2.endDate || experience2.endDate === null) {
+        return 1;
+      } else if (experience1.endDate > experience2.endDate) {
+        return -1;
+      }
+
+      return 0;
+    });
+
+    freelancer.educations = freelancer.educations.sort((education1, education2) => {
+      if (education1.endDate < education2.endDate || education2.endDate === null) {
+        return 1;
+      } else if (education1.endDate > education2.endDate) {
+        return -1;
+      }
+
+      return 0;
+    });
+
+    res.status(httpStatus.OK).json(freelancer);
+  } catch {
+    throw new ErrorResponse('Not found', httpStatus.NOT_FOUND, 'NOT_FOUND');
+  }
+};
+
+/**
+ * @api {GET} /freelancer/:id/visibility Get Freelancer Visibility
+ * @apiGroup Freelancer
+ * @apiName FreelancerGetVisibility
+ *
+ * @apiDescription Get a freelancer visibility.
+ *
+ * @apiParam {String} id The freelancer's id
+ *
+ * @apiSuccess (Success (200)) {Boolean} visible Indicate if the freelancer is visible
+ * @apiSuccess (Success (200)) {Boolean} missing.location.town Indicate if town is filled
+ * @apiSuccess (Success (200)) {Boolean} missing.location.countryCode Indicate if the country is filled
+ * @apiSuccess (Success (200)) {Boolean} missing.hourlyRate Indicate if the hourly rate is filled
+ * @apiSuccess (Success (200)) {Boolean} missing.title Indicate if the title is filled
+ * @apiSuccess (Success (200)) {Boolean} missing.presentationText Indicate if the presentation text is filled
+ * @apiSuccess (Success (200)) {Boolean} missing.contact Indicate if the contact informations are filled
+ *
+ * @apiPermission Public
+ */
+const getFreelancerVisibility = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const freelancer = await Freelancer.findById(id);
+
+    if (freelancer === null) {
+      throw new Error();
+    }
+
+    const data = {
+      visible: isFreelancerPublic(freelancer) ? true : false,
+      missing: {}
+    };
+
+    if (!freelancer.location) {
+      data.missing.location = { town: true, countryCode: true };
+    } else {
+      data.missing.location = {};
+
+      if (!freelancer.location.town) {
+        data.missing.location.town = true;
+      }
+
+      if (!freelancer.location.countryCode) {
+        data.missing.location.countryCode = true;
+      }
+    }
+
+    if (!freelancer.hourlyRate) {
+      data.missing.hourlyRate = true;
+    }
+
+    if (!freelancer.title) {
+      data.missing.title = true;
+    }
+
+    if (!freelancer.presentationText) {
+      data.missing.presentationText = true;
+    }
+
+    if (!freelancer.contact) {
+      data.missing.contact = true;
+    } else {
+      data.missing.contact = {};
+
+      if (!freelancer.contact.email) {
+        data.missing.contact.email = true;
+      }
+
+      if (!freelancer.contact.phone) {
+        data.missing.contact.phone = true;
+      }
+    }
+
+    res.status(httpStatus.OK).json(data);
+  } catch {
+    throw new ErrorResponse('Not found', httpStatus.NOT_FOUND, 'NOT_FOUND');
+  }
 };
 
 /**
@@ -438,6 +599,8 @@ const updateContact = async (req, res) => {
 
 export {
   getMe,
+  getFreelancer,
+  getFreelancerVisibility,
   getGeneral,
   getPresentation,
   getSkills,

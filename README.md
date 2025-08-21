@@ -62,10 +62,10 @@ CLEAR_TOKENS_CRON_DATE=* * * * *
 
 
 # The production front end URL
-APP_PROD_URL=https://app.markedit.net
+APP_PROD_URL=https://app.findfreelancer.com
 
 # The development front end URL
-APP_DEV_URL=https://app-dev.markedit.net
+APP_DEV_URL=https://app-dev.findfreelancer.com
 ```
 
 ## Run API
@@ -84,6 +84,6 @@ npm run prod
 npm run gendoc
 ```
 
-- Version: 0.3.0
+- Version: 0.4.0
 - License: MIT
 - Author: Raphael Ragoomundun
