@@ -78,6 +78,26 @@ const getFreelancer = async (req, res) => {
       throw new Error();
     }
 
+    freelancer.experiences = freelancer.experiences.sort((experience1, experience2) => {
+      if (experience1.endDate < experience2.endDate || experience2.endDate === null) {
+        return 1;
+      } else if (experience1.endDate > experience2.endDate) {
+        return -1;
+      }
+
+      return 0;
+    });
+
+    freelancer.educations = freelancer.educations.sort((education1, education2) => {
+      if (education1.endDate < education2.endDate || education2.endDate === null) {
+        return 1;
+      } else if (education1.endDate > education2.endDate) {
+        return -1;
+      }
+
+      return 0;
+    });
+
     res.status(httpStatus.OK).json(freelancer);
   } catch {
     throw new ErrorResponse('Not found', httpStatus.NOT_FOUND, 'NOT_FOUND');
