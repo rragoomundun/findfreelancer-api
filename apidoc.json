@@ -16,6 +16,8 @@
     "AuthForgotPassword",
     "AuthResetPassword",
     "AuthAuthorized",
+    "Home",
+    "HomeGetHome",
     "Freelancer",
     "FreelancerGetMe",
     "FreelancerGetFreelancer",
