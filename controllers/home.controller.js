@@ -4,7 +4,7 @@ import Freelancer from '../models/Freelancer.js';
 import CarouselItem from '../models/CarouselItem.js';
 
 /**
- * @api {Get} /home Get Home
+ * @api {GET} /home Get Home
  * @apiGroup Home
  * @apiName HomeGetHome
  *

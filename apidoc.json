@@ -39,6 +39,8 @@
     "FreelancerUpdateEducation",
     "FreelancerUpdateLanguages",
     "FreelancerUpdateContact",
+    "Search",
+    "SearchFreelancer",
     "File",
     "FileUpload",
     "FileDelete"

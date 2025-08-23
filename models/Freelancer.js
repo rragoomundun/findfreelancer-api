@@ -151,6 +151,9 @@ const FreelancerSchema = new Schema(
   }
 );
 
+// Setup text index for title and description
+FreelancerSchema.index({ title: 'text', presentationText: 'text' }, { weights: { title: 2, presentationText: 1 } });
+
 // Encrypt password using bcrypt
 FreelancerSchema.pre('save', async function (next) {
   if (!this.isModified('password')) {
