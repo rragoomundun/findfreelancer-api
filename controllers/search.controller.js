@@ -19,7 +19,7 @@ import Freelancer from '../models/Freelancer.js';
  * @apiPermission Public
  */
 const searchFreelancers = async (req, res) => {
-  const pageLimit = 5;
+  const pageLimit = 20;
   const query = { $text: { $search: req.query.query } };
   let page, offset;
 
