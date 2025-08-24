@@ -79,13 +79,17 @@ const versionPrefix = '/v1';
 //Route files
 import apiRoute from './routes/api.route.js';
 import authRoute from './routes/auth.route.js';
+import homeRoute from './routes/home.route.js';
 import freelancerRoute from './routes/freelancer.route.js';
+import searchRoute from './routes/search.route.js';
 import fileRoute from './routes/file.route.js';
 
 // Mount router
 app.use(`${versionPrefix}/api`, apiRoute);
 app.use(`${versionPrefix}/auth`, authRoute);
+app.use(`${versionPrefix}/home`, homeRoute);
 app.use(`${versionPrefix}/freelancer`, freelancerRoute);
+app.use(`${versionPrefix}/search`, searchRoute);
 app.use(`${versionPrefix}/file`, fileRoute);
 
 // Errors
