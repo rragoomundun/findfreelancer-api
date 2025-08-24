@@ -16,11 +16,11 @@ import CarouselItem from '../models/CarouselItem.js';
  * @apiPermission Public
  */
 const getHome = async (req, res) => {
-  const carousel = await CarouselItem.find().select({ _id: 0, image: 1, routerLink: 1, queryParams: 1 });
+  const carousel = await CarouselItem.find().select({ _id: 0, image: 1, imageSmall: 1, routerLink: 1, queryParams: 1 });
   const freelancers = await Freelancer.find()
-    .select({ firstName: 1, lastName: 1, title: 1, hourlyRate: 1, location: 1, createdAt: 1 })
+    .select({ firstName: 1, lastName: 1, image: 1, title: 1, hourlyRate: 1, location: 1, createdAt: 1 })
     .sort({ createdAt: -1 })
-    .limit(4);
+    .limit(6);
 
   res.status(httpStatus.OK).json({ carousel, freelancers });
 };
