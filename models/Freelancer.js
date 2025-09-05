@@ -36,6 +36,12 @@ const FreelancerSchema = new Schema(
     skills: [String],
     experiences: [
       {
+        _id: {
+          type: mongoose.Schema.Types.ObjectId,
+          default: () => new mongoose.Types.ObjectId(),
+          required: true
+        },
+
         title: {
           type: String,
           required: true
@@ -67,6 +73,12 @@ const FreelancerSchema = new Schema(
     ],
     educations: [
       {
+        _id: {
+          type: mongoose.Schema.Types.ObjectId,
+          default: () => new mongoose.Types.ObjectId(),
+          required: true
+        },
+
         school: {
           type: String,
           required: true
@@ -94,6 +106,12 @@ const FreelancerSchema = new Schema(
     ],
     languages: [
       {
+        _id: {
+          type: mongoose.Schema.Types.ObjectId,
+          default: () => new mongoose.Types.ObjectId(),
+          required: true
+        },
+
         code: {
           type: String,
           required: true
@@ -111,6 +129,11 @@ const FreelancerSchema = new Schema(
     },
     tokens: [
       {
+        _id: {
+          type: mongoose.Schema.Types.ObjectId,
+          default: () => new mongoose.Types.ObjectId(),
+          required: true
+        },
         value: {
           type: String,
           required: true

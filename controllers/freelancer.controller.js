@@ -1,4 +1,5 @@
 import httpStatus from 'http-status-codes';
+import { Types } from 'mongoose';
 
 import Freelancer from '../models/Freelancer.js';
 
@@ -287,13 +288,10 @@ const getExperiences = async (req, res) => {
   });
 
   freelancer.experiences = freelancer.experiences.sort((experience1, experience2) => {
-    if (experience1.endDate < experience2.endDate || experience2.endDate === null) {
-      return 1;
-    } else if (experience1.endDate > experience2.endDate) {
-      return -1;
-    }
+    if (!experience1.endDate) return -1;
+    if (!experience2.endDate) return 1;
 
-    return 0;
+    return new Date(experience2.endDate).getTime() - new Date(experience1.endDate).getTime();
   });
 
   res.status(httpStatus.OK).json(freelancer.experiences);
@@ -517,6 +515,141 @@ const updateSkills = async (req, res) => {
 };
 
 /**
+ * @api {POST} /freelancer/profile/experience Create Experience
+ * @apiGroup Freelancer
+ * @apiName FreelancerCreateExperience
+ *
+ * @apiDescription Create a new experience
+ *
+ * @apiBody {String} title The experience title
+ * @apiBody {String} organization The organization where the experience happened
+ * @apiBody {String} town The town where the experience happened
+ * @apiBody {String} countryCode The country code of where the experience happened
+ * @apiBody {Date} startDate The start date of the experience
+ * @apiBody {Date} [endDate] The end date of the experience
+ * @apiBody {String} description The description of the experience
+ *
+ * @apiSuccess (Success (200)) {String} _id The created experience id
+ * @apiSuccess (Success (200)) {String} organization The created experience organization
+ * @apiSuccess (Success (200)) {String} town The created experience town
+ * @apiSuccess (Success (200)) {String} countryCode The created experience country code
+ * @apiSuccess (Success (200)) {Date} startDate The created experience start date
+ * @apiSuccess (Success (200)) {Date} endDate The created experience end date
+ * @apiSuccess (Success (200)) {String} description The created experience description
+ *
+ * @apiSuccessExample Success Example
+ * {
+ *   "_id": "68ba9eb02a28ce5490e0e17f",
+ *   "title": "Backend PHP Developer",
+ *   "organization": "BackPHP",
+ *   "town": "Belfort",
+ *   "countryCode": "FR",
+ *   "startDate": "2020-01-01",
+ *   "endDate": "2023-08-01",
+ *   "description": "Lorem ipsum... experience de developpement web a Belfort"
+ * }
+ *
+ * @apiPermission Private
+ */
+const createExperience = async (req, res) => {
+  const { _id } = req.freelancer;
+  const { title, organization, town, countryCode, startDate, endDate, description } = req.body;
+  const newExperience = {
+    _id: new Types.ObjectId(),
+    title,
+    organization,
+    town,
+    countryCode,
+    startDate: new Date(startDate),
+    endDate: endDate ? new Date(endDate) : null,
+    description
+  };
+
+  await Freelancer.updateOne(
+    { _id },
+    {
+      $push: {
+        experiences: newExperience
+      }
+    }
+  );
+
+  res.status(httpStatus.OK).json(newExperience);
+};
+
+/**
+ * @api {PUT} /freelancer/profile/experience/:id Update Experience
+ * @apiGroup Freelancer
+ * @apiName FreelancerUpdateExperience
+ *
+ * @apiDescription Update a freelancer's experience
+ *
+ * @apiParam {String} id The experience id
+ *
+ * @apiBody {String} title The experience title
+ * @apiBody {String} organization The organization where the experience happened
+ * @apiBody {String} town The town where the experience happened
+ * @apiBody {String} countryCode The country code of where the experience happened
+ * @apiBody {Date} startDate The start date of the experience
+ * @apiBody {Date} [endDate] The end date of the experience
+ * @apiBody {String} description The description of the experience
+ *
+ * @apiPermission Private
+ */
+
+const updateExperience = async (req, res) => {
+  const { _id } = req.freelancer;
+  const { id } = req.params;
+  const { title, organization, town, countryCode, description } = req.body;
+  let { startDate, endDate } = req.body;
+
+  startDate = new Date(startDate);
+
+  if (endDate) {
+    endDate = new Date(endDate);
+  } else {
+    endDate = null;
+  }
+
+  await Freelancer.updateMany(
+    { _id, 'experiences._id': id },
+    {
+      $set: {
+        'experiences.$.title': title,
+        'experiences.$.organization': organization,
+        'experiences.$.town': town,
+        'experiences.$.countryCode': countryCode,
+        'experiences.$.description': description,
+        'experiences.$.startDate': startDate,
+        'experiences.$.endDate': endDate
+      }
+    }
+  );
+
+  res.status(httpStatus.OK).end();
+};
+
+/**
+ * @api {DELETE} /freelancer/profile/experience/:id Delete Experience
+ * @apiGroup Freelancer
+ * @apiName FreelancerDeleteExperience
+ *
+ * @apiDescription Delete a freelancer's experience
+ *
+ * @apiParam {String} id The experience id
+ *
+ * @apiPermission Private
+ */
+const deleteExperience = async (req, res) => {
+  const { _id } = req.freelancer;
+  const { id } = req.params;
+
+  await Freelancer.updateOne({ _id }, { $pull: { experiences: { _id: id } } });
+
+  res.status(httpStatus.OK).end();
+};
+
+/**
  * @api {PUT} /freelancer/profile/experiences Update Experiences
  * @apiGroup Freelancer
  * @apiName FreelancerUpdateExperiences
@@ -614,6 +747,9 @@ export {
   updateGeneral,
   updatePresentation,
   updateSkills,
+  createExperience,
+  updateExperience,
+  deleteExperience,
   updateExperiences,
   updateEducation,
   updateLanguages,
