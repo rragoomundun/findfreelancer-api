@@ -17,6 +17,9 @@ import {
   updateGeneral,
   updatePresentation,
   updateSkills,
+  createExperience,
+  updateExperience,
+  deleteExperience,
   updateExperiences,
   updateEducation,
   updateLanguages,
@@ -28,6 +31,8 @@ import {
   securityValidator,
   generalValidator,
   skillsValidator,
+  createExperienceValidator,
+  singleExperienceValidator,
   experiencesValidator,
   educationValidator,
   languagesValidator,
@@ -40,8 +45,6 @@ const router = express.Router();
 
 router
   .get('/', authenticateMiddleware, getMe)
-  .get('/:id', getFreelancer)
-  .get('/:id/visibility', getFreelancerVisibility)
   .get('/general', authenticateMiddleware, getGeneral)
   .get('/presentation', authenticateMiddleware, getPresentation)
   .get('/skills', authenticateMiddleware, getSkills)
@@ -55,9 +58,14 @@ router
   .put('/profile/general', authenticateMiddleware, generalValidator, updateGeneral)
   .put('/profile/presentation', authenticateMiddleware, updatePresentation)
   .put('/profile/skills', authenticateMiddleware, skillsValidator, updateSkills)
+  .post('/profile/experience', authenticateMiddleware, createExperienceValidator, createExperience)
+  .put('/profile/experience/:id', authenticateMiddleware, singleExperienceValidator, updateExperience)
+  .delete('/profile/experience/:id', authenticateMiddleware, deleteExperience)
   .put('/profile/experiences', authenticateMiddleware, experiencesValidator, updateExperiences)
   .put('/profile/education', authenticateMiddleware, educationValidator, updateEducation)
   .put('/profile/languages', authenticateMiddleware, languagesValidator, updateLanguages)
-  .put('/profile/contact', authenticateMiddleware, contactValidator, updateContact);
+  .put('/profile/contact', authenticateMiddleware, contactValidator, updateContact)
+  .get('/:id', getFreelancer)
+  .get('/:id/visibility', getFreelancerVisibility);
 
 export default router;

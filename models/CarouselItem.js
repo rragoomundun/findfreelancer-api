@@ -6,6 +6,10 @@ const CarouselItemSchema = new Schema({
     type: String,
     required: true
   },
+  imageSmall: {
+    type: String,
+    required: true
+  },
   routerLink: {
     type: String,
     required: true
