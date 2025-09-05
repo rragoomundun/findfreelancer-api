@@ -9,7 +9,6 @@ import rateLimit from 'express-rate-limit';
 
 import connectDB from './config/db.js';
 
-import xssProtectMiddleware from './middlewares/xssProtect.middleware.js';
 import notFoundMiddleware from './middlewares/notFound.middleware.js';
 import errorMiddleware from './middlewares/error.middleware.js';
 
@@ -60,9 +59,6 @@ app.use(helmet());
 
 // Prevent HTTP parameters pollution
 app.use(hpp());
-
-// Protect against XSS attacks
-app.use(xssProtectMiddleware);
 
 // Limit the number of requests per minute in prod mode
 if (process.env.NODE_ENV === 'prod') {
