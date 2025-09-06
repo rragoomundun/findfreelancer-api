@@ -21,7 +21,10 @@ import {
   updateExperience,
   deleteExperience,
   updateExperiences,
+  createEducation,
   updateEducation,
+  updateEducations,
+  deleteEducation,
   updateLanguages,
   updateContact
 } from '../controllers/freelancer.controller.js';
@@ -34,6 +37,8 @@ import {
   createExperienceValidator,
   singleExperienceValidator,
   experiencesValidator,
+  createEducationValidator,
+  singleEducationValidator,
   educationValidator,
   languagesValidator,
   contactValidator
@@ -62,7 +67,10 @@ router
   .put('/profile/experience/:id', authenticateMiddleware, singleExperienceValidator, updateExperience)
   .delete('/profile/experience/:id', authenticateMiddleware, deleteExperience)
   .put('/profile/experiences', authenticateMiddleware, experiencesValidator, updateExperiences)
-  .put('/profile/education', authenticateMiddleware, educationValidator, updateEducation)
+  .post('/profile/education', authenticateMiddleware, createEducationValidator, createEducation)
+  .put('/profile/education/:id', authenticateMiddleware, singleEducationValidator, updateEducation)
+  .put('/profile/education', authenticateMiddleware, educationValidator, updateEducations)
+  .delete('/profile/education/:id', authenticateMiddleware, deleteEducation)
   .put('/profile/languages', authenticateMiddleware, languagesValidator, updateLanguages)
   .put('/profile/contact', authenticateMiddleware, contactValidator, updateContact)
   .get('/:id', getFreelancer)
