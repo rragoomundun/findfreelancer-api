@@ -321,13 +321,10 @@ const getEducation = async (req, res) => {
   });
 
   freelancer.educations = freelancer.educations.sort((education1, education2) => {
-    if (education1.endDate < education2.endDate || education2.endDate === null) {
-      return 1;
-    } else if (education1.endDate > education2.endDate) {
-      return -1;
-    }
+    if (!education1.endDate) return -1;
+    if (!education2.endDate) return 1;
 
-    return 0;
+    return new Date(education2.endDate).getTime() - new Date(education1.endDate).getTime();
   });
 
   res.status(httpStatus.OK).json(freelancer.educations);
@@ -670,21 +667,148 @@ const updateExperiences = async (req, res) => {
 };
 
 /**
- * @api {PUT} /freelancer/profile/education Update Education
+ * @api {POST} /freelancer/profile/education Create Education
+ * @apiGroup Freelancer
+ * @apiName FreelancerCreateEducation
+ *
+ * @apiDescription Create an education.
+ *
+ * @apiBody {String} school The education school
+ * @apiBody {String} town The town where the education happeped
+ * @apiBody {String} countryCode The country code of where the education happened
+ * @apiBody {Date} startDate The start date of the education
+ * @apiBody {Date} [endDate] The end date of the education
+ * @apiBody {String} description The description of the education
+ *
+ * @apiSuccess (Success (200)) {String} _id The id of the newly created education
+ * @apiSuccess (Success (200)) {String} school The education school
+ * @apiSuccess (Success (200)) {String} town The town where the education happeped
+ * @apiSuccess (Success (200)) {String} countryCode The country code of where the education happened
+ * @apiSuccess (Success (200)) {Date} startDate The start date of the education
+ * @apiSuccess (Success (200)) {Date} endDate The end date of the education
+ * @apiSuccess (Success (200)) {String} description The description of the education
+ *
+ * @apiSuccessExample Success Example
+ * {
+ *   "_id": "68ba9eb02a28ce5490e0e17f",
+ *   "school": "University of Portsmouth",
+ *   "town": "Portmsouth",
+ *   "countryCode": "GB",
+ *   "startDate": "2020-01-01",
+ *   "endDate": "2023-08-01",
+ *   "description": "Lorem ipsum... education at portsmouth"
+ * }
+ */
+const createEducation = async (req, res) => {
+  const { _id } = req.freelancer;
+  const { school, town, countryCode, startDate, endDate, description } = req.body;
+  const newEducation = {
+    _id: new Types.ObjectId(),
+    school,
+    town,
+    countryCode,
+    startDate: new Date(startDate),
+    endDate: endDate ? new Date(endDate) : null,
+    description
+  };
+
+  await Freelancer.updateOne(
+    { _id },
+    {
+      $push: {
+        educations: newEducation
+      }
+    }
+  );
+
+  res.status(httpStatus.OK).json(newEducation);
+};
+
+/**
+ * @api {PUT} /freelancer/profile/education/:id Update Education
  * @apiGroup Freelancer
  * @apiName FreelancerUpdateEducation
  *
- * @apiDescription Update a freelancer education
+ * @apiDescription Update an education.
  *
- * @apiBody {Object[]} education The education of the freelancer
+ * @apiParam {String} id The education id
+ *
+ * @apiBody {String} school The education school
+ * @apiBody {String} town The town where the education happeped
+ * @apiBody {String} countryCode The country code of where the education happened
+ * @apiBody {Date} startDate The start date of the education
+ * @apiBody {Date} [endDate] The end date of the education
+ * @apiBody {String} description The description of the education
  *
  * @apiPermission Private
  */
 const updateEducation = async (req, res) => {
   const { _id } = req.freelancer;
+  const { id } = req.params;
+  const { school, town, countryCode, description } = req.body;
+  let { startDate, endDate } = req.body;
+
+  startDate = new Date(startDate);
+
+  if (endDate) {
+    endDate = new Date(endDate);
+  } else {
+    endDate = null;
+  }
+
+  await Freelancer.updateOne(
+    { _id, 'educations._id': id },
+    {
+      $set: {
+        'educations.$.school': school,
+        'educations.$.town': town,
+        'educations.$.countryCode': countryCode,
+        'educations.$.description': description,
+        'educations.$.startDate': startDate,
+        'educations.$.endDate': endDate
+      }
+    }
+  );
+
+  res.status(httpStatus.OK).end();
+};
+
+/**
+ * @api {PUT} /freelancer/profile/education Update Educations
+ * @apiGroup Freelancer
+ * @apiName FreelancerUpdateEducations
+ *
+ * @apiDescription Update a freelancer's educations
+ *
+ * @apiBody {Object[]} education The education of the freelancer
+ *
+ * @apiPermission Private
+ */
+const updateEducations = async (req, res) => {
+  const { _id } = req.freelancer;
   const { education } = req.body;
 
   await Freelancer.findByIdAndUpdate(_id, { educations: education });
+
+  res.status(httpStatus.OK).end();
+};
+
+/**
+ * @api {DELETE} /freelancer/profile/education/:id Delete Education
+ * @apiGroup Freelancer
+ * @apiName FreelancerDeleteEducation
+ *
+ * @apiDescription Delete a freelancer's education
+ *
+ * @apiParam {String} id The education id
+ *
+ * @apiPermission Private
+ */
+const deleteEducation = async (req, res) => {
+  const { _id } = req.freelancer;
+  const { id } = req.params;
+
+  await Freelancer.updateOne({ _id }, { $pull: { educations: { _id: id } } });
 
   res.status(httpStatus.OK).end();
 };
@@ -751,7 +875,10 @@ export {
   updateExperience,
   deleteExperience,
   updateExperiences,
+  createEducation,
   updateEducation,
+  updateEducations,
+  deleteEducation,
   updateLanguages,
   updateContact
 };
