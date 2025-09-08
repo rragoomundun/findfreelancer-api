@@ -45,20 +45,13 @@ const securityValidator = validation([
 ]);
 
 const generalValidator = validation([
-  body('town').notEmpty().withMessage('EMPTY'),
   body('countryCode')
-    .notEmpty()
-    .withMessage('EMPTY')
+    .optional()
     .custom((value) => {
-      if (countries.includes(value) === false) {
+      if (value !== '' && countries.includes(value) === false) {
         throw new Error('INVALID_COUNTRY_CODE');
       }
-    }),
-  body('hourlyRate')
-    .notEmpty()
-    .withMessage('EMPTY')
-    .isInt({ min: 5, max: 100 })
-    .withMessage('INVALID_HOURLY_RATE_RANGE')
+    })
 ]);
 
 const skillsValidator = validation([
