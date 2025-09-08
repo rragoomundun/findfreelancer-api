@@ -17,7 +17,14 @@ import CarouselItem from '../models/CarouselItem.js';
  */
 const getHome = async (req, res) => {
   const carousel = await CarouselItem.find().select({ _id: 0, image: 1, imageSmall: 1, routerLink: 1, queryParams: 1 });
-  const freelancers = await Freelancer.find()
+  const freelancers = await Freelancer.find({
+    'location.town': { $exists: true, $ne: '' },
+    'location.countryCode': { $exists: true, $ne: '' },
+    hourlyRate: { $exists: true, $ne: '' },
+    title: { $exists: true, $ne: '' },
+    presentationText: { $exists: true, $ne: '' },
+    $or: [{ 'contact.email': { $exists: true, $ne: '' } }, { 'contact.phone': { $exists: true, $ne: '' } }]
+  })
     .select({ firstName: 1, lastName: 1, image: 1, title: 1, hourlyRate: 1, location: 1, createdAt: 1 })
     .sort({ createdAt: -1 })
     .limit(6);
