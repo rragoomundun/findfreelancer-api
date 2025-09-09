@@ -58,7 +58,15 @@ const getFreelancer = async (req, res) => {
   const { id } = req.params;
 
   try {
-    const freelancer = await Freelancer.findById(id).select({
+    const freelancer = await Freelancer.findOne({
+      _id: id,
+      'location.town': { $exists: true, $ne: '' },
+      'location.countryCode': { $exists: true, $ne: '' },
+      hourlyRate: { $exists: true, $ne: '' },
+      title: { $exists: true, $ne: '' },
+      presentationText: { $exists: true, $ne: '' },
+      $or: [{ 'contact.email': { $exists: true, $ne: '' } }, { 'contact.phone': { $exists: true, $ne: '' } }]
+    }).select({
       _id: 1,
       email: 1,
       firstName: 1,
