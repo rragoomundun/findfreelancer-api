@@ -20,7 +20,15 @@ import Freelancer from '../models/Freelancer.js';
  */
 const searchFreelancers = async (req, res) => {
   const pageLimit = 20;
-  const query = { $text: { $search: req.query.query } };
+  const query = {
+    $text: { $search: req.query.query },
+    'location.town': { $exists: true, $ne: '' },
+    'location.countryCode': { $exists: true, $ne: '' },
+    hourlyRate: { $exists: true, $ne: '' },
+    title: { $exists: true, $ne: '' },
+    presentationText: { $exists: true, $ne: '' },
+    $or: [{ 'contact.email': { $exists: true, $ne: '' } }, { 'contact.phone': { $exists: true, $ne: '' } }]
+  };
   let page, offset;
 
   if (req.query.page) {
