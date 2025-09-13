@@ -67,6 +67,7 @@ const searchFreelancers = async (req, res) => {
     title: 1,
     presentationText: 1,
     hourlyRate: 1,
+    'location.countryCode': 1,
     skills: 1
   });
 
