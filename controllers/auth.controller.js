@@ -276,8 +276,7 @@ const sendTokenResponse = async (freelancerId, statusCode, res) => {
 
   const options = {
     expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * process.env.JWT_COOKIE_EXPIRE),
-    sameSite: 'None',
-    secure: true
+    sameSite: 'None'
   };
 
   res.status(statusCode).cookie('token', token, options).json({ token });
