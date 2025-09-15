@@ -275,8 +275,7 @@ const sendTokenResponse = async (freelancerId, statusCode, res) => {
   const token = freelancer.getSignedJWTToken();
 
   const options = {
-    expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * process.env.JWT_COOKIE_EXPIRE),
-    sameSite: 'None'
+    expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * process.env.JWT_COOKIE_EXPIRE)
   };
 
   res.status(statusCode).cookie('token', token, options).json({ token });
