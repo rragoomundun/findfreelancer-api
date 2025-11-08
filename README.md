@@ -9,9 +9,8 @@ Rename file **config.env** to **.env** and update the values.
 ### .env example
 
 ```
-# Port to use
-PORT=5000
-
+# The API environment
+NODE_ENV=dev
 
 # Maximum number of requests per minute (only used in prod mode)
 RATE_LIMIT=100
@@ -22,10 +21,10 @@ MONGO_URI=mongodb://user:password@127.0.0.1:27017/db
 
 
 # AWS API Access Key
-AWS_ACCESS_KEY_ID=accesskeyid
+APP_ACCESS_KEY_ID=accesskeyid
 
 # AWS API Secret Access Key
-AWS_SECRET_ACCESS_KEY=secretaccesskey
+APP_SECRET_ACCESS_KEY=secretaccesskey
 
 # AWS S3 Upload Bucket Region
 AWS_S3_REGION=s3region

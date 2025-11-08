@@ -5,9 +5,7 @@
   "main": "server.js",
   "type": "module",
   "scripts": {
-    "dev": "NODE_ENV=dev nodemon --env-file=.env server.js",
-    "prod": "NODE_ENV=prod node --env-file=.env server.js",
-    "gendoc": "node ./node_modules/apidoc/bin/apidoc -i ./controllers/ -o ./public"
+    "gendoc": "node ./node_modules/apidoc/bin/apidoc -c src/apidoc.json -i ./src/controllers/ -o ./public"
   },
   "repository": {
     "type": "git",
@@ -23,6 +21,7 @@
     "@aws-sdk/client-s3": "^3.864.0",
     "@aws-sdk/client-sesv2": "^3.864.0",
     "apidoc": "^1.2.0",
+    "aws-serverless-express": "^3.4.0",
     "bcrypt": "^6.0.0",
     "colors": "^1.4.0",
     "cookie-parser": "^1.4.7",
@@ -41,6 +40,8 @@
     "multer": "^2.0.2",
     "mustache": "^4.2.0",
     "node-cron": "^4.2.1",
-    "nodemailer": "^7.0.5"
+    "nodemailer": "^7.0.5",
+    "serverless-http": "^3.2.0",
+    "serverless-offline": "^14.4.0"
   }
 }

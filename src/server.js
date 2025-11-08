@@ -11,7 +11,6 @@ import connectDB from './config/db.js';
 
 import notFoundMiddleware from './middlewares/notFound.middleware.js';
 import errorMiddleware from './middlewares/error.middleware.js';
-
 // Connect to database
 connectDB();
 
@@ -37,9 +36,9 @@ if (process.env.NODE_ENV === 'dev') {
     /http:\/\/127\.0\.0\.1:.*/,
     /https:\/\/127\.0\.0\.1:.*/
   );
-} else {
-  origin.push(process.env.APP_URL);
 }
+
+origin.push(process.env.APP_URL);
 
 app.use(
   cors({
@@ -70,8 +69,6 @@ if (process.env.NODE_ENV === 'prod') {
   );
 }
 
-const versionPrefix = '/v1';
-
 //Route files
 import apiRoute from './routes/api.route.js';
 import authRoute from './routes/auth.route.js';
@@ -81,12 +78,12 @@ import searchRoute from './routes/search.route.js';
 import fileRoute from './routes/file.route.js';
 
 // Mount router
-app.use(`${versionPrefix}/api`, apiRoute);
-app.use(`${versionPrefix}/auth`, authRoute);
-app.use(`${versionPrefix}/home`, homeRoute);
-app.use(`${versionPrefix}/freelancer`, freelancerRoute);
-app.use(`${versionPrefix}/search`, searchRoute);
-app.use(`${versionPrefix}/file`, fileRoute);
+app.use('/api', apiRoute);
+app.use('/auth', authRoute);
+app.use('/home', homeRoute);
+app.use('/freelancer', freelancerRoute);
+app.use('/search', searchRoute);
+app.use('/file', fileRoute);
 
 // Errors
 app.use(notFoundMiddleware);
@@ -97,6 +94,4 @@ import tokenCrons from './crons/token.cron.js';
 
 tokenCrons.clearTokens();
 
-app.listen(process.env.PORT, () => {
-  console.log(`[OK] Server is running in ${process.env.NODE_ENV} mode on port ${process.env.PORT}`.green);
-});
+export default app;

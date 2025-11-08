@@ -1,0 +1,52 @@
+# "org" ensures this Service is used with the correct Serverless Framework Access Key.
+org: raphaelragoomundun
+# "app" enables Serverless Framework Dashboard features and sharing them with other Services.
+app: findfreelancer-api
+# "service" is the name of this project. This will also be added to your AWS resource names.
+service: findfreelancer
+
+params:
+  dev:
+    domain: api-findfreelancer-dev.r3tests.net
+  prod:
+    domain: api-findfreelancer.r3tests.net
+
+provider:
+  name: aws
+  region: eu-west-1
+  runtime: nodejs22.x
+  domain: ${param:domain}
+  environment:
+    NODE_ENV: ${env:NODE_ENV}
+    RATE_LIMIT: ${env:RATE_LIMIT}
+    MONGO_URI: ${env:MONGO_URI}
+    JWT_SECRET: ${env:JWT_SECRET}
+    JWT_EXPIRE: ${env:JWT_EXPIRE}
+    JWT_COOKIE_EXPIRE: ${env:JWT_COOKIE_EXPIRE}
+    APP_ACCESS_KEY_ID: ${env:APP_ACCESS_KEY_ID}
+    APP_SECRET_ACCESS_KEY: ${env:APP_SECRET_ACCESS_KEY}
+    AWS_S3_REGION: ${env:AWS_S3_REGION}
+    AWS_S3_BUCKET_NAME: ${env:AWS_S3_BUCKET_NAME}
+    AWS_SES_REGION: ${env:AWS_SES_REGION}
+    FROM_NAME: ${env:FROM_NAME}
+    FROM_EMAIL: ${env:FROM_EMAIL}
+    REPLY_EMAIL: ${env:REPLY_EMAIL}
+    CLEAR_TOKENS_CRON_DATE: ${env:CLEAR_TOKENS_CRON_DATE}
+    APP_PROD_URL: ${env:APP_PROD_URL}
+    APP_DEV_URL: ${env:APP_DEV_URL}
+
+functions:
+  api:
+    handler: handler.handler
+    events:
+      - http:
+          path: /
+          method: GET
+          cors: true
+      - http:
+          path: /{proxy+}
+          method: ANY
+          cors: true
+
+plugins:
+  - serverless-offline
