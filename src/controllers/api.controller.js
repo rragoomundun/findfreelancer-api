@@ -17,7 +17,7 @@ import httpStatus from 'http-status-codes';
  */
 const getStatus = (req, res, next) => {
   res.status(httpStatus.OK).json({
-    message: `API is running in ${process.env.NODE_ENV} mode on port ${process.env.PORT}`
+    message: `API is running in ${process.env.NODE_ENV} mode`
   });
 };
 
