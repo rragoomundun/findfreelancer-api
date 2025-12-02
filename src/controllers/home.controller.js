@@ -16,7 +16,14 @@ import CarouselItem from '../models/CarouselItem.js';
  * @apiPermission Public
  */
 const getHome = async (req, res) => {
-  const carousel = await CarouselItem.find().select({ _id: 0, image: 1, imageSmall: 1, routerLink: 1, queryParams: 1 });
+  const carousel = await CarouselItem.find().select({
+    _id: 0,
+    image: 1,
+    imageSmall: 1,
+    routerLink: 1,
+    queryParams: 1
+  });
+
   const freelancers = await Freelancer.find({
     'location.town': { $exists: true, $ne: '' },
     'location.countryCode': { $exists: true, $ne: '' },
