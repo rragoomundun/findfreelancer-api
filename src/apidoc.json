@@ -3,8 +3,8 @@
   "version": "0.6.0",
   "description": "Backend API for FindFreelancer",
   "title": "FindFreelancer API",
-  "url": "http://localhost:3000/dev",
-  "sampleUrl": "http://localhost:3000/dev",
+  "url": "https://findfreelancer-dev.r3tests.net",
+  "sampleUrl": "https://findfreelancer-dev.r3tests.net",
   "order": [
     "API",
     "APIGetStatus",
