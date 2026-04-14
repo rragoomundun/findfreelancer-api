@@ -21,9 +21,6 @@ app.use(express.static('public'));
 
 if (process.env.NODE_ENV === 'dev') {
   app.use(morgan('dev'));
-  process.env.APP_URL = process.env.APP_DEV_URL;
-} else {
-  process.env.APP_URL = process.env.APP_PROD_URL;
 }
 
 // Enable CORS
