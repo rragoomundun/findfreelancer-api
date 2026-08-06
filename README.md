@@ -17,7 +17,7 @@ RATE_LIMIT=100
 
 
 # The MongoDB connexion uri
-MONGO_URI=mongodb://user:password@127.0.0.1:27017/db
+MONGO_URI=mongodb+srv://<username>:<password>@<host>/<database>?appName=<app_name>
 
 
 # AWS API Access Key

@@ -11,6 +11,7 @@ import connectDB from './config/db.js';
 
 import notFoundMiddleware from './middlewares/notFound.middleware.js';
 import errorMiddleware from './middlewares/error.middleware.js';
+
 // Connect to database
 connectDB();
 
